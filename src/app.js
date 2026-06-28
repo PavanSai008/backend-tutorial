@@ -13,4 +13,22 @@ app.post("/notes", async (req, res) => {
   res.status(201).json({ message: "Note Created" });
 });
 
+app.get("/notes", async (req, res) => {
+  const notes = await noteModel.find();
+  res.status(200).json({ message: "fetched", notes: notes });
+});
+
+app.delete("/notes/:id", async (req, res) => {
+  const id = req.params.id;
+  await noteModel.findOneAndDelete({ _id: id });
+  res.status(200).json({ message: "deleted" });
+});
+
+app.patch("/notes/:id", async (req, res) => {
+  const id = req.params.id;
+  const description = req.body.description;
+  await noteModel.findOneAndUpdate({ _id: id }, { description: description });
+  res.status(200).json({ message: "updated" });
+});
+
 module.exports = app;
